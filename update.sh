@@ -29,6 +29,8 @@ get_part() {
 	return 1
 }
 
+latest="$(get_part . latest '')"
+
 repo="$(get_part . repo '')"
 if [ "$repo" ]; then
 	if [[ "$repo" != */* ]]; then
@@ -48,6 +50,7 @@ for version in "${versions[@]}"; do
 	mirror="$(get_part "$dir" mirror '')"
 	script="$(get_part "$dir" script '')"
 	arch="$(get_part "$dir" arch '')"
+	qemu_arch="$(get_part "$dir" qemu_arch '$arch')"
 	#debootstrap="$(get_part "$dir" debootstrap 'debootstrap')"
 
 	args=( -d "$dir" debootstrap )
@@ -63,28 +66,40 @@ for version in "${versions[@]}"; do
 		fi
 	fi
 
-	mkimage="$(readlink -f "${MKIMAGE:-"mkimage.sh"}")"
-	{
+	if [ "$SKIP_DEBOOTSTRAP" != "1" ]; then
+	    mkimage="$(readlink -f "${MKIMAGE:-"mkimage.sh"}")"
+	    {
 		echo "$(basename "$mkimage") ${args[*]/"$dir"/.}"
 		echo
 		echo 'https://github.com/docker/docker/blob/master/contrib/mkimage.sh'
-	} > "$dir/build-command.txt"
+	    } > "$dir/build-command.txt"
+	    
+	    sudo DEBOOTSTRAP="qemu-debootstrap" nice ionice -c 3 "$mkimage" "${args[@]}" 2>&1 | tee "$dir/build.log"
+	    
+	    sudo chown -R "$(id -u):$(id -g)" "$dir"
 
-	sudo DEBOOTSTRAP="qemu-debootstrap" nice ionice -c 3 "$mkimage" "${args[@]}" 2>&1 | tee "$dir/build.log"
+            xz -d < $dir/rootfs.tar.xz | gzip -c > $dir/rootfs.tar.gz
+	fi
 
-	sudo chown -R "$(id -u):$(id -g)" "$dir"
-
-        xz -d < $dir/rootfs.tar.xz | gzip -c > $dir/rootfs.tar.gz
-
-	# qemu-user-static
-	#wget --no-check-certificate https://github.com/armbuild/qemu-user-static/raw/master/x86_64/qemu-arm-static -O "${dir}"/qemu-arm-static
-	#chmod +x "${dir}/qemu-arm-static"
-	#echo "COPY ./qemu-arm-static /usr/local/bin/" >> "${dir}"/Dockerfile
-		
 	
 	if [ "$repo" ]; then
-		docker build -t "${repo}:${suite}-${arch}" "$dir"
-		docker run -it --rm "${repo}:${suite}" bash -xc '
+		docker build -t "${repo}:${arch}-${suite}-slim" "${dir}"
+		mkdir -p "${dir}/full"
+		cat > "${dir}/full/Dockerfile" <<EOF
+FROM ${repo}:${arch}-${suite}-slim
+ADD https://github.com/multiarch/qemu-user-static/releases/download/v2.0.0/amd64_qemu-${qemu_arch}-static.tar.gz /usr/bin
+EOF
+		docker build -t "${repo}:${arch}-${suite}" "${dir}/full"
+	fi
+	
+	if [ "${latest}" = "${suite}" ]; then
+	    docker tag -f "${repo}:${arch}-${suite}-slim" "${repo}:${arch}-slim"
+	    docker tag -f "${repo}:${arch}-${suite}" "${repo}:${arch}"
+	fi
+
+	docker run -it --rm "${repo}:${arch}-${suite}" bash -xc '
+                        uname -a
+                        echo
 			cat /etc/apt/sources.list
 			echo
 			cat /etc/os-release 2>/dev/null
@@ -94,10 +109,5 @@ for version in "${versions[@]}"; do
 			cat /etc/debian_version 2>/dev/null
 			true
 		'
-	fi
-	latest="$(get_part . latest '')"
-	if [ "$latest" = "${suite}" ]; then
-	    docker tag -f "${repo}:${suite}-${arch}" "${repo}:${arch}"
-	fi
 done
 
