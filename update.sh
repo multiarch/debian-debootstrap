@@ -50,7 +50,7 @@ for version in "${versions[@]}"; do
 	mirror="$(get_part "$dir" mirror '')"
 	script="$(get_part "$dir" script '')"
 	arch="$(get_part "$dir" arch '')"
-	qemu_arch="$(get_part "$dir" qemu_arch '$arch')"
+	qemu_arch="$(get_part "$dir" qemu_arch $arch)"
 	#debootstrap="$(get_part "$dir" debootstrap 'debootstrap')"
 
 	args=( -d "$dir" debootstrap )
@@ -83,13 +83,16 @@ for version in "${versions[@]}"; do
 
 	
 	if [ "$repo" ]; then
-		docker build -t "${repo}:${arch}-${suite}-slim" "${dir}"
-		mkdir -p "${dir}/full"
-		cat > "${dir}/full/Dockerfile" <<EOF
+	    if ! grep --quiet "^ENV" "${dir}/Dockerfile"; then
+		echo "ENV ARCH=${arch} UBUNTU_SUITE=${suite} DOCKER_REPO=${repo}" >> "${dir}/Dockerfile"
+	    fi
+	    docker build -t "${repo}:${arch}-${suite}-slim" "${dir}"
+	    mkdir -p "${dir}/full"
+	    cat > "${dir}/full/Dockerfile" <<EOF
 FROM ${repo}:${arch}-${suite}-slim
 ADD https://github.com/multiarch/qemu-user-static/releases/download/v2.0.0/amd64_qemu-${qemu_arch}-static.tar.gz /usr/bin
 EOF
-		docker build -t "${repo}:${arch}-${suite}" "${dir}/full"
+	    docker build -t "${repo}:${arch}-${suite}" "${dir}/full"
 	fi
 	
 	if [ "${latest}" = "${suite}" ]; then
