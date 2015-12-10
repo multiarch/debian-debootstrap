@@ -84,9 +84,8 @@ for version in "${versions[@]}"; do
 
 	
 	if [ "$repo" ]; then
-	    if ! grep --quiet "^ENV" "${dir}/Dockerfile"; then
-		echo "ENV ARCH=${uname_arch} UBUNTU_SUITE=${suite} DOCKER_REPO=${repo}" >> "${dir}/Dockerfile"
-	    fi
+	    sed -i /^ENV/d "${dir}/Dockerfile"
+	    echo "ENV ARCH=${uname_arch} UBUNTU_SUITE=${suite} DOCKER_REPO=${repo}" >> "${dir}/Dockerfile"
 	    docker build -t "${repo}:${arch}-${suite}-slim" "${dir}"
 	    mkdir -p "${dir}/full"
 	    cat > "${dir}/full/Dockerfile" <<EOF
