@@ -90,7 +90,7 @@ for version in "${versions[@]}"; do
 	    mkdir -p "${dir}/full"
 	    cat > "${dir}/full/Dockerfile" <<EOF
 FROM ${repo}:${arch}-${suite}-slim
-ADD https://github.com/multiarch/qemu-user-static/releases/download/v2.0.0/amd64_qemu-${qemu_arch}-static.tar.gz /usr/bin
+ADD https://github.com/multiarch/qemu-user-static/releases/download/v2.7.0/amd64_qemu-${qemu_arch}-static.tar.gz /usr/bin
 EOF
 	    docker build -t "${repo}:${arch}-${suite}" "${dir}/full"
 	fi
