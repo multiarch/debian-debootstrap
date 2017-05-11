@@ -1,1 +1,0 @@
-../docker/contrib/mkimage.sh
