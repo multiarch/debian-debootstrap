@@ -11,8 +11,6 @@ env:
         - ARCH=armel INCLUDE=wget QEMU_ARCH=armeb SUITE=jessie UNAME_ARCH=armel VERSION=jessie
         - ARCH=armhf INCLUDE=wget QEMU_ARCH=arm SUITE=jessie UNAME_ARCH=armv7l VERSION=jessie
         - ARCH=i386 INCLUDE=wget QEMU_ARCH=i386 SUITE=jessie UNAME_ARCH=i386 VERSION=jessie
-        - ARCH=mips INCLUDE=wget QEMU_ARCH=mips SUITE=jessie UNAME_ARCH=mips VERSION=jessie
-        - ARCH=mipsel INCLUDE=wget QEMU_ARCH=mipsel SUITE=jessie UNAME_ARCH=mipsel VERSION=jessie
         - ARCH=powerpc INCLUDE=wget QEMU_ARCH=ppc SUITE=jessie UNAME_ARCH=powerpc VERSION=jessie
         - ARCH=ppc64el INCLUDE=wget QEMU_ARCH=ppc64 SUITE=jessie UNAME_ARCH=ppc64el VERSION=jessie
         - ARCH=s390x INCLUDE=wget QEMU_ARCH=s390x SUITE=jessie UNAME_ARCH=s390x VERSION=jessie
@@ -35,15 +33,6 @@ env:
         - ARCH=mips INCLUDE=wget QEMU_ARCH=mips SUITE=stretch UNAME_ARCH=mips VERSION=stretch
         - ARCH=mipsel INCLUDE=wget QEMU_ARCH=mipsel SUITE=stretch UNAME_ARCH=mipsel VERSION=stretch
         - ARCH=ppc64el INCLUDE=wget QEMU_ARCH=ppc64 SUITE=stretch UNAME_ARCH=ppc64el VERSION=stretch
-        
-        - ARCH=amd64 INCLUDE=wget QEMU_ARCH=x86_64 SUITE=buster UNAME_ARCH=x86_64 VERSION=buster
-        - ARCH=arm64 INCLUDE=wget QEMU_ARCH=aarch64 SUITE=buster UNAME_ARCH=arm64 VERSION=buster
-        - ARCH=armel INCLUDE=wget QEMU_ARCH=armeb SUITE=buster UNAME_ARCH=armel VERSION=buster
-        - ARCH=armhf INCLUDE=wget QEMU_ARCH=arm SUITE=buster UNAME_ARCH=armv7l VERSION=buster
-        - ARCH=i386 INCLUDE=wget QEMU_ARCH=i386 SUITE=buster UNAME_ARCH=i386 VERSION=buster
-        - ARCH=mips INCLUDE=wget QEMU_ARCH=mips SUITE=buster UNAME_ARCH=mips VERSION=buster
-        - ARCH=mipsel INCLUDE=wget QEMU_ARCH=mipsel SUITE=buster UNAME_ARCH=mipsel VERSION=buster
-        - ARCH=ppc64el INCLUDE=wget QEMU_ARCH=ppc64 SUITE=buster UNAME_ARCH=ppc64el VERSION=buster
 
         - ARCH=amd64 INCLUDE=wget QEMU_ARCH=x86_64 SUITE=wheezy UNAME_ARCH=x86_64 VERSION=wheezy
         - ARCH=armel INCLUDE=wget QEMU_ARCH=armeb SUITE=wheezy UNAME_ARCH=armel VERSION=wheezy
@@ -54,8 +43,8 @@ env:
         - ARCH=powerpc INCLUDE=wget QEMU_ARCH=ppc SUITE=wheezy UNAME_ARCH=powerpc VERSION=wheezy
 
 before_script:
-    - echo "deb http://ftp.de.debian.org/debian sid main" | sudo tee -a /etc/apt/sources.list
-    - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8B48AD6246925553 7638D0442B90D010
+    # - echo "deb http://ftp.de.debian.org/debian sid main" | sudo tee -a /etc/apt/sources.list
+    # - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8B48AD6246925553 7638D0442B90D010
     - sudo apt-get update -qq
     - sudo apt-get -y install debootstrap qemu-user-static
 script:
