@@ -11,8 +11,6 @@ env:
         - ARCH=armel INCLUDE=wget QEMU_ARCH=armeb SUITE=jessie UNAME_ARCH=armel VERSION=jessie
         - ARCH=armhf INCLUDE=wget QEMU_ARCH=arm SUITE=jessie UNAME_ARCH=armv7l VERSION=jessie
         - ARCH=i386 INCLUDE=wget QEMU_ARCH=i386 SUITE=jessie UNAME_ARCH=i386 VERSION=jessie
-        - ARCH=mips INCLUDE=wget QEMU_ARCH=mips SUITE=jessie UNAME_ARCH=mips VERSION=jessie
-        - ARCH=mipsel INCLUDE=wget QEMU_ARCH=mipsel SUITE=jessie UNAME_ARCH=mipsel VERSION=jessie
         - ARCH=powerpc INCLUDE=wget QEMU_ARCH=ppc SUITE=jessie UNAME_ARCH=powerpc VERSION=jessie
         - ARCH=ppc64el INCLUDE=wget QEMU_ARCH=ppc64 SUITE=jessie UNAME_ARCH=ppc64el VERSION=jessie
         - ARCH=s390x INCLUDE=wget QEMU_ARCH=s390x SUITE=jessie UNAME_ARCH=s390x VERSION=jessie
