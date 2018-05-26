@@ -56,10 +56,9 @@ env:
 before_script:
     - sudo apt-get update -qq
     - sudo apt-get dist-upgrade -y
-    - echo "deb http://ftp.de.debian.org/debian buster main" | sudo tee -a /etc/apt/sources.list
-    - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8B48AD6246925553 7638D0442B90D010
+    - echo "deb http://archive.ubuntu.com/ubuntu bionic main universe" | sudo tee -a /etc/apt/sources.list
     - sudo apt-get update -qq
-    - sudo apt-get -y install debootstrap qemu-user-static
+    - sudo apt-get -yt bionic install qemu-user-static debootstrap
 script:
     - sudo ./update.sh -a "$ARCH" -v "$VERSION" -q "$QEMU_ARCH" -u "$QEMU_VER" -d "$DOCKER_REPO" -s "$SUITE" -i "$INCLUDE" -o "$UNAME_ARCH"
 after_success:
