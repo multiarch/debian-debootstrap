@@ -14,7 +14,6 @@ env:
         - ARCH=i386 INCLUDE=wget QEMU_ARCH=i386 SUITE=sid UNAME_ARCH=i386 VERSION=sid
         - ARCH=mips INCLUDE=wget QEMU_ARCH=mips SUITE=sid UNAME_ARCH=mips VERSION=sid
         - ARCH=mipsel INCLUDE=wget QEMU_ARCH=mipsel SUITE=sid UNAME_ARCH=mipsel VERSION=sid
-        - ARCH=powerpc INCLUDE=wget QEMU_ARCH=ppc SUITE=sid UNAME_ARCH=powerpc VERSION=sid
         - ARCH=ppc64el INCLUDE=wget QEMU_ARCH=ppc64 SUITE=sid UNAME_ARCH=ppc64el VERSION=sid
 
         - ARCH=amd64 INCLUDE=wget QEMU_ARCH=x86_64 SUITE=stretch UNAME_ARCH=x86_64 VERSION=stretch
