@@ -2,6 +2,13 @@ dist: xenial
 sudo: required
 services: docker
 language: bash
+addons:
+  apt:
+    sources:
+        - sourceline: 'deb http://archive.ubuntu.com/ubuntu bionic main universe'
+    packages:
+      - debootstrap
+      - qemu-user-static
 env:
     global:
         - QEMU_VER=v3.1.0-3
@@ -33,13 +40,6 @@ env:
         - ARCH=mips INCLUDE=wget QEMU_ARCH=mips SUITE=buster UNAME_ARCH=mips VERSION=buster
         - ARCH=mipsel INCLUDE=wget QEMU_ARCH=mipsel SUITE=buster UNAME_ARCH=mipsel VERSION=buster
         - ARCH=ppc64el INCLUDE=wget QEMU_ARCH=ppc64 SUITE=buster UNAME_ARCH=ppc64el VERSION=buster
-
-before_script:
-    - sudo apt-get update -qq
-    - sudo apt-get install --only-upgrade dpkg
-    - echo "deb http://archive.ubuntu.com/ubuntu bionic main universe" | sudo tee -a /etc/apt/sources.list
-    - sudo apt-get update -qq
-    - sudo apt-get -yt bionic install qemu-user-static debootstrap
 script:
     - sudo ./update.sh -a "$ARCH" -v "$VERSION" -q "$QEMU_ARCH" -u "$QEMU_VER" -d "$DOCKER_REPO" -s "$SUITE" -i "$INCLUDE" -o "$UNAME_ARCH"
 after_success:
