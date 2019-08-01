@@ -40,6 +40,15 @@ env:
         - ARCH=mips INCLUDE=wget QEMU_ARCH=mips SUITE=buster UNAME_ARCH=mips VERSION=buster
         - ARCH=mipsel INCLUDE=wget QEMU_ARCH=mipsel SUITE=buster UNAME_ARCH=mipsel VERSION=buster
         - ARCH=ppc64el INCLUDE=wget QEMU_ARCH=ppc64 SUITE=buster UNAME_ARCH=ppc64el VERSION=buster
+
+        - ARCH=amd64 INCLUDE=wget QEMU_ARCH=x86_64 SUITE=bullseye UNAME_ARCH=x86_64 VERSION=bullseye
+        - ARCH=arm64 INCLUDE=wget QEMU_ARCH=aarch64 SUITE=bullseye UNAME_ARCH=arm64 VERSION=bullseye
+        - ARCH=armel INCLUDE=wget QEMU_ARCH=armeb SUITE=bullseye UNAME_ARCH=armel VERSION=bullseye
+        - ARCH=armhf INCLUDE=wget QEMU_ARCH=arm SUITE=bullseye UNAME_ARCH=armv7l VERSION=bullseye
+        - ARCH=i386 INCLUDE=wget QEMU_ARCH=i386 SUITE=bullseye UNAME_ARCH=i386 VERSION=bullseye
+        - ARCH=mips INCLUDE=wget QEMU_ARCH=mips SUITE=bullseye UNAME_ARCH=mips VERSION=bullseye
+        - ARCH=mipsel INCLUDE=wget QEMU_ARCH=mipsel SUITE=bullseye UNAME_ARCH=mipsel VERSION=bullseye
+        - ARCH=ppc64el INCLUDE=wget QEMU_ARCH=ppc64 SUITE=bullseye UNAME_ARCH=ppc64el VERSION=bullseye
 script:
     - sudo ./update.sh -a "$ARCH" -v "$VERSION" -q "$QEMU_ARCH" -u "$QEMU_VER" -d "$DOCKER_REPO" -s "$SUITE" -i "$INCLUDE" -o "$UNAME_ARCH"
 after_success:
