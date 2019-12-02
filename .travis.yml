@@ -11,7 +11,7 @@ addons:
       - qemu-user-static
 env:
     global:
-        - QEMU_VER=v3.1.0-3
+        - QEMU_VER=v4.1.1-1
         - DOCKER_REPO=multiarch/debian-debootstrap
     matrix:
         - ARCH=amd64 INCLUDE=wget QEMU_ARCH=x86_64 SUITE=sid UNAME_ARCH=x86_64 VERSION=sid
@@ -56,4 +56,8 @@ env:
 script:
     - sudo ./update.sh -a "$ARCH" -v "$VERSION" -q "$QEMU_ARCH" -u "$QEMU_VER" -d "$DOCKER_REPO" -s "$SUITE" -i "$INCLUDE" -o "$UNAME_ARCH"
 after_success:
-    - if [[ $TRAVIS_PULL_REQUEST == 'false' ]]; then docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" && docker push $DOCKER_REPO; fi
+    - |
+      if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
+          docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" && \
+              docker push $DOCKER_REPO
+      fi
