@@ -19,7 +19,6 @@ env:
         - ARCH=armel INCLUDE=wget QEMU_ARCH=armeb SUITE=sid UNAME_ARCH=armel VERSION=sid
         - ARCH=armhf INCLUDE=wget QEMU_ARCH=arm SUITE=sid UNAME_ARCH=armv7l VERSION=sid
         - ARCH=i386 INCLUDE=wget QEMU_ARCH=i386 SUITE=sid UNAME_ARCH=i386 VERSION=sid
-        - ARCH=mips INCLUDE=wget QEMU_ARCH=mips SUITE=sid UNAME_ARCH=mips VERSION=sid
         - ARCH=mipsel INCLUDE=wget QEMU_ARCH=mipsel SUITE=sid UNAME_ARCH=mipsel VERSION=sid
         - ARCH=mips64el INCLUDE=wget QEMU_ARCH=mipsel SUITE=sid UNAME_ARCH=mips64el VERSION=sid
         - ARCH=ppc64el INCLUDE=wget QEMU_ARCH=ppc64 SUITE=sid UNAME_ARCH=ppc64el VERSION=sid
@@ -49,7 +48,6 @@ env:
         - ARCH=armel INCLUDE=wget QEMU_ARCH=armeb SUITE=bullseye UNAME_ARCH=armel VERSION=bullseye
         - ARCH=armhf INCLUDE=wget QEMU_ARCH=arm SUITE=bullseye UNAME_ARCH=armv7l VERSION=bullseye
         - ARCH=i386 INCLUDE=wget QEMU_ARCH=i386 SUITE=bullseye UNAME_ARCH=i386 VERSION=bullseye
-        - ARCH=mips INCLUDE=wget QEMU_ARCH=mips SUITE=bullseye UNAME_ARCH=mips VERSION=bullseye
         - ARCH=mipsel INCLUDE=wget QEMU_ARCH=mipsel SUITE=bullseye UNAME_ARCH=mipsel VERSION=bullseye
         - ARCH=mips64el INCLUDE=wget QEMU_ARCH=mipsel SUITE=bullseye UNAME_ARCH=mips64el VERSION=bullseye
         - ARCH=ppc64el INCLUDE=wget QEMU_ARCH=ppc64 SUITE=bullseye UNAME_ARCH=ppc64el VERSION=bullseye
