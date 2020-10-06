@@ -12,45 +12,10 @@ addons:
 env:
     global:
         - QEMU_VER=v4.2.0-2
-        - DOCKER_REPO=multiarch/debian-debootstrap
+        - DOCKER_REPO=pqclean/multiarch-debian-debootstrap
+        - MIRROR=http://ftp.ports.debian.org/debian-ports/
     matrix:
-        - ARCH=amd64 INCLUDE=wget QEMU_ARCH=x86_64 SUITE=sid UNAME_ARCH=x86_64 VERSION=sid
-        - ARCH=arm64 INCLUDE=wget QEMU_ARCH=aarch64 SUITE=sid UNAME_ARCH=arm64 VERSION=sid
-        - ARCH=armel INCLUDE=wget QEMU_ARCH=armeb SUITE=sid UNAME_ARCH=armel VERSION=sid
-        - ARCH=armhf INCLUDE=wget QEMU_ARCH=arm SUITE=sid UNAME_ARCH=armv7l VERSION=sid
-        - ARCH=i386 INCLUDE=wget QEMU_ARCH=i386 SUITE=sid UNAME_ARCH=i386 VERSION=sid
-        - ARCH=mipsel INCLUDE=wget QEMU_ARCH=mipsel SUITE=sid UNAME_ARCH=mipsel VERSION=sid
-        - ARCH=mips64el INCLUDE=wget QEMU_ARCH=mipsel SUITE=sid UNAME_ARCH=mips64el VERSION=sid
-        - ARCH=ppc64el INCLUDE=wget QEMU_ARCH=ppc64 SUITE=sid UNAME_ARCH=ppc64el VERSION=sid
-
-        - ARCH=amd64 INCLUDE=wget QEMU_ARCH=x86_64 SUITE=stretch UNAME_ARCH=x86_64 VERSION=stretch
-        - ARCH=arm64 INCLUDE=wget QEMU_ARCH=aarch64 SUITE=stretch UNAME_ARCH=arm64 VERSION=stretch
-        - ARCH=armel INCLUDE=wget QEMU_ARCH=armeb SUITE=stretch UNAME_ARCH=armel VERSION=stretch
-        - ARCH=armhf INCLUDE=wget QEMU_ARCH=arm SUITE=stretch UNAME_ARCH=armv7l VERSION=stretch
-        - ARCH=i386 INCLUDE=wget QEMU_ARCH=i386 SUITE=stretch UNAME_ARCH=i386 VERSION=stretch
-        - ARCH=mips INCLUDE=wget QEMU_ARCH=mips SUITE=stretch UNAME_ARCH=mips VERSION=stretch
-        - ARCH=mipsel INCLUDE=wget QEMU_ARCH=mipsel SUITE=stretch UNAME_ARCH=mipsel VERSION=stretch
-        - ARCH=mips64el INCLUDE=wget QEMU_ARCH=mipsel SUITE=stretch UNAME_ARCH=mips64el VERSION=stretch
-        - ARCH=ppc64el INCLUDE=wget QEMU_ARCH=ppc64 SUITE=stretch UNAME_ARCH=ppc64el VERSION=stretch
-
-        - ARCH=amd64 INCLUDE=wget QEMU_ARCH=x86_64 SUITE=buster UNAME_ARCH=x86_64 VERSION=buster
-        - ARCH=arm64 INCLUDE=wget QEMU_ARCH=aarch64 SUITE=buster UNAME_ARCH=arm64 VERSION=buster
-        - ARCH=armel INCLUDE=wget QEMU_ARCH=armeb SUITE=buster UNAME_ARCH=armel VERSION=buster
-        - ARCH=armhf INCLUDE=wget QEMU_ARCH=arm SUITE=buster UNAME_ARCH=armv7l VERSION=buster
-        - ARCH=i386 INCLUDE=wget QEMU_ARCH=i386 SUITE=buster UNAME_ARCH=i386 VERSION=buster
-        - ARCH=mips INCLUDE=wget QEMU_ARCH=mips SUITE=buster UNAME_ARCH=mips VERSION=buster
-        - ARCH=mipsel INCLUDE=wget QEMU_ARCH=mipsel SUITE=buster UNAME_ARCH=mipsel VERSION=buster
-        - ARCH=mips64el INCLUDE=wget QEMU_ARCH=mipsel SUITE=buster UNAME_ARCH=mips64el VERSION=buster
-        - ARCH=ppc64el INCLUDE=wget QEMU_ARCH=ppc64 SUITE=buster UNAME_ARCH=ppc64el VERSION=buster
-
-        - ARCH=amd64 INCLUDE=wget QEMU_ARCH=x86_64 SUITE=bullseye UNAME_ARCH=x86_64 VERSION=bullseye
-        - ARCH=arm64 INCLUDE=wget QEMU_ARCH=aarch64 SUITE=bullseye UNAME_ARCH=arm64 VERSION=bullseye
-        - ARCH=armel INCLUDE=wget QEMU_ARCH=armeb SUITE=bullseye UNAME_ARCH=armel VERSION=bullseye
-        - ARCH=armhf INCLUDE=wget QEMU_ARCH=arm SUITE=bullseye UNAME_ARCH=armv7l VERSION=bullseye
-        - ARCH=i386 INCLUDE=wget QEMU_ARCH=i386 SUITE=bullseye UNAME_ARCH=i386 VERSION=bullseye
-        - ARCH=mipsel INCLUDE=wget QEMU_ARCH=mipsel SUITE=bullseye UNAME_ARCH=mipsel VERSION=bullseye
-        - ARCH=mips64el INCLUDE=wget QEMU_ARCH=mipsel SUITE=bullseye UNAME_ARCH=mips64el VERSION=bullseye
-        - ARCH=ppc64el INCLUDE=wget QEMU_ARCH=ppc64 SUITE=bullseye UNAME_ARCH=ppc64el VERSION=bullseye
+        - ARCH=powerpc INCLUDE=wget QEMU_ARCH=ppc  SUITE=bullseye UNAME_ARCH=powerpc VERSION=bullseye
 script:
     - sudo ./update.sh -a "$ARCH" -v "$VERSION" -q "$QEMU_ARCH" -u "$QEMU_VER" -d "$DOCKER_REPO" -s "$SUITE" -i "$INCLUDE" -o "$UNAME_ARCH"
 after_success:

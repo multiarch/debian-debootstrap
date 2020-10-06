@@ -26,12 +26,14 @@ done
 
 shift $((OPTIND-1))
 
+MIRROR="${MIRROR:-http://ftp.debian.org/debian/}"
+
 [ "$1" = "--" ] && shift
 
 dir="$VERSION"
 COMPONENTS="main"
 VARIANT="minbase"
-args=( -d "$dir" debootstrap --no-check-gpg --variant="$VARIANT" --components="$COMPONENTS" --include="$INCLUDE" --arch="$ARCH" "$SUITE" )
+args=( -d "$dir" debootstrap --no-check-gpg --variant="$VARIANT" --components="$COMPONENTS" --include="$INCLUDE" --arch="$ARCH" "$SUITE" "$MIRROR")
 
 mkdir -p mkimage $dir
 curl https://raw.githubusercontent.com/docker/docker/master/contrib/mkimage.sh > mkimage.sh
