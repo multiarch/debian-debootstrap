@@ -16,12 +16,6 @@ env:
         - MIRROR=http://ftp.ports.debian.org/debian-ports/
     matrix:
         - ARCH=powerpc INCLUDE=wget QEMU_ARCH=ppc  SUITE=sid UNAME_ARCH=powerpc VERSION=sid
-
-jobs:
-  allow_failures:
-    - ARCH=powerpc INCLUDE=wget QEMU_ARCH=ppc  SUITE=sid UNAME_ARCH=powerpc VERSION=sid
-
-
 script:
     - sudo ./update.sh -a "$ARCH" -v "$VERSION" -q "$QEMU_ARCH" -u "$QEMU_VER" -d "$DOCKER_REPO" -s "$SUITE" -i "$INCLUDE" -o "$UNAME_ARCH"
 after_success:
