@@ -36,8 +36,8 @@ VARIANT="minbase"
 args=( -d "$dir" debootstrap --no-check-gpg --variant="$VARIANT" --components="$COMPONENTS" --include="$INCLUDE" --arch="$ARCH" "$SUITE" "$MIRROR")
 
 mkdir -p mkimage $dir
-curl https://raw.githubusercontent.com/docker/docker/master/contrib/mkimage.sh > mkimage.sh
-curl https://raw.githubusercontent.com/docker/docker/master/contrib/mkimage/debootstrap > mkimage/debootstrap
+curl https://raw.githubusercontent.com/moby/moby/72c21a7e5d8da44b39fc95b84efc2dbc5038f938/contrib/mkimage.sh > mkimage.sh
+curl https://raw.githubusercontent.com/moby/moby/72c21a7e5d8da44b39fc95b84efc2dbc5038f938/contrib/mkimage/debootstrap > mkimage/debootstrap
 chmod +x mkimage.sh mkimage/debootstrap
 
 mkimage="$(readlink -f "${MKIMAGE:-"mkimage.sh"}")"
