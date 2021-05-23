@@ -1,17 +1,16 @@
-dist: xenial
-sudo: required
+dist: bionic
 services: docker
 language: bash
 addons:
     apt:
         sources:
-            - sourceline: "deb http://archive.ubuntu.com/ubuntu bionic main universe"
+            - sourceline: 'deb http://archive.ubuntu.com/ubuntu bionic main universe'
         packages:
             - debootstrap
             - qemu-user-static
 env:
     global:
-        - QEMU_VER=v4.2.0-2
+        - QEMU_VER=v5.2.0-2
         - DOCKER_REPO=multiarch/debian-debootstrap
     matrix:
         - ARCH=amd64 INCLUDE=wget QEMU_ARCH=x86_64 SUITE=sid UNAME_ARCH=x86_64 VERSION=sid
@@ -52,7 +51,7 @@ env:
         - ARCH=mips64el INCLUDE=wget QEMU_ARCH=mipsel SUITE=bullseye UNAME_ARCH=mips64el VERSION=bullseye
         - ARCH=ppc64el INCLUDE=wget QEMU_ARCH=ppc64 SUITE=bullseye UNAME_ARCH=ppc64el VERSION=bullseye
 script:
-    - sudo ./update.sh -a "$ARCH" -v "$VERSION" -q "$QEMU_ARCH" -u "$QEMU_VER" -d "$DOCKER_REPO" -s "$SUITE" -i "$INCLUDE" -o "$UNAME_ARCH"
+    - ./update.sh -a "$ARCH" -v "$VERSION" -q "$QEMU_ARCH" -u "$QEMU_VER" -d "$DOCKER_REPO" -s "$SUITE" -i "$INCLUDE" -o "$UNAME_ARCH"
 after_success:
     - |
         if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
