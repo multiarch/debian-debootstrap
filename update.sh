@@ -16,10 +16,6 @@ while getopts "a:v:q:u:d:s:i:o:" opt; do
         ;;
     d)  DOCKER_REPO=$OPTARG
         ;;
-    s)  SUITE=$OPTARG
-        ;;
-    i)  INCLUDE=$OPTARG
-        ;;
     o)  UNAME_ARCH=$OPTARG
         ;;
     esac
@@ -32,7 +28,7 @@ shift $((OPTIND-1))
 dir="$VERSION"
 COMPONENTS="main"
 VARIANT="minbase"
-args=( -d "$dir" debootstrap --variant="$VARIANT" --components="$COMPONENTS" --include="$INCLUDE" --arch="$ARCH" "$SUITE" )
+args=( -d "$dir" debootstrap --no-check-gpg --variant="$VARIANT" --components="$COMPONENTS" --include="wget" --arch="$ARCH" "$VERSION" )
 
 mkdir -p mkimage $dir
 curl https://raw.githubusercontent.com/moby/moby/6f78b438b88511732ba4ac7c7c9097d148ae3568/contrib/mkimage.sh > mkimage.sh
@@ -52,10 +48,10 @@ sudo chown -R "$(id -u):$(id -g)" "$dir"
 
 xz -d < $dir/rootfs.tar.xz | gzip -c > $dir/rootfs.tar.gz
 sed -i /^ENV/d "${dir}/Dockerfile"
-echo "ENV ARCH=${UNAME_ARCH} UBUNTU_SUITE=${SUITE} DOCKER_REPO=${DOCKER_REPO}" >> "${dir}/Dockerfile"
+echo "ENV ARCH=${UNAME_ARCH} UBUNTU_SUITE=${VERSION} DOCKER_REPO=${DOCKER_REPO}" >> "${dir}/Dockerfile"
 
 if [ "$DOCKER_REPO" ]; then
-    docker build -t "${DOCKER_REPO}:${ARCH}-${SUITE}-slim" "${dir}"
+    docker build -t "${DOCKER_REPO}:${ARCH}-${VERSION}-slim" "${dir}"
     mkdir -p "${dir}/full"
     (
     cd "${dir}/full"
@@ -65,21 +61,10 @@ if [ "$DOCKER_REPO" ]; then
     tar xf x86_64_qemu-*.gz
     )
     cat > "${dir}/full/Dockerfile" <<EOF
-FROM ${DOCKER_REPO}:${ARCH}-${SUITE}-slim
+FROM ${DOCKER_REPO}:${ARCH}-${VERSION}-slim
 ADD qemu-*-static /usr/bin/
 EOF
-    docker build -t "${DOCKER_REPO}:${ARCH}-${SUITE}" "${dir}/full"
+    docker build -t "${DOCKER_REPO}:${ARCH}-${VERSION}" "${dir}/full"
 fi
 
-docker run -it --rm "${DOCKER_REPO}:${ARCH}-${SUITE}" bash -xc '
-    uname -a
-    echo
-    cat /etc/apt/sources.list
-    echo
-    cat /etc/os-release 2>/dev/null
-    echo
-    cat /etc/lsb-release 2>/dev/null
-    echo
-    cat /etc/debian_version 2>/dev/null
-    true
-'
+docker run --rm ${DOCKER_REPO}:${ARCH}-${VERSION} /bin/sh -ec "echo Hello from Debian !; set -x; uname -a;"
