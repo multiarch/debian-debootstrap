@@ -1,4 +1,4 @@
-# :earth_africa: debian-debootstrap [![Build Status](https://travis-ci.org/multiarch/debian-debootstrap.svg?branch=master)](https://travis-ci.org/multiarch/debian-debootstrap)
+# :earth_africa: debian-debootstrap [![actions](https://github.com/multiarch/debian-debootstrap/actions/workflows/actions.yml/badge.svg)](https://github.com/multiarch/debian-debootstrap/actions/workflows/actions.yml)
 
 ![](https://raw.githubusercontent.com/multiarch/dockerfile/master/logo.jpg)
 
