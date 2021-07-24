@@ -1,0 +1,39 @@
+name: actions
+on:
+  push:
+  schedule:
+    - cron: '0 0 * * 0'
+jobs:
+  debian-debootstrap:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        QEMU_VER: [v6.0.0-1]
+        DOCKER_REPO: [docker.io/multiarch/debian-debootstrap]
+        VERSION: [sid, stretch, buster, bullseye]
+        UNAME_ARCH: [x86_64, arm64, armel, armv7l, i386, mipsel, mips64el, ppc64el, s390x]
+        include:
+          - {ARCH: amd64,     QEMU_ARCH: x86_64,  UNAME_ARCH: x86_64}
+          - {ARCH: arm64,     QEMU_ARCH: aarch64, UNAME_ARCH: arm64}
+          - {ARCH: armel,     QEMU_ARCH: armeb,   UNAME_ARCH: armel}
+          - {ARCH: armhf,     QEMU_ARCH: arm,     UNAME_ARCH: armv7l}
+          - {ARCH: i386,      QEMU_ARCH: i386,    UNAME_ARCH: i386}
+          - {ARCH: mipsel,    QEMU_ARCH: mipsel,  UNAME_ARCH: mipsel}
+          - {ARCH: mips64el,  QEMU_ARCH: mipsel,  UNAME_ARCH: mips64el}
+          - {ARCH: ppc64el,   QEMU_ARCH: ppc64,   UNAME_ARCH: ppc64el}
+          - {ARCH: s390x,     QEMU_ARCH: s390x,   UNAME_ARCH: s390x}
+        exclude:
+          - {VERSION: sid,      UNAME_ARCH: arm64}
+          - {VERSION: bullseye, UNAME_ARCH: arm64}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: |
+          sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu focal main universe'
+          sudo apt-get update && sudo apt-get install -y qemu-user-static debootstrap
+          ./update.sh -a ${{ matrix.ARCH }} -v ${{ matrix.VERSION }} -q ${{ matrix.QEMU_ARCH }} -u ${{ matrix.QEMU_VER }} -d ${{ matrix.DOCKER_REPO }} -o ${{ matrix.UNAME_ARCH }}
+      - name: Publish
+        if: github.ref == 'refs/heads/master'
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+          docker push -a ${{ matrix.DOCKER_REPO }}
