@@ -1,0 +1,29 @@
+name: actions
+on:
+  push:
+  schedule:
+    - cron: '0 0 * * 0'
+jobs:
+  debian-debootstrap:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        QEMU_VER: [v6.1.0-1]
+        DOCKER_REPO: [docker.io/pqclean/multiarch-debian-debootstrap]
+        VERSION: [sid]
+        UNAME_ARCH: [powerpc]
+        include:
+          - {ARCH: powerpc,   QEMU_ARCH: ppc,   UNAME_ARCH: powerpc}
+        exclude:
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: |
+          sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu focal main universe'
+          sudo apt-get update && sudo apt-get install -y qemu-user-static debootstrap
+          ./update.sh -a ${{ matrix.ARCH }} -v ${{ matrix.VERSION }} -q ${{ matrix.QEMU_ARCH }} -u ${{ matrix.QEMU_VER }} -d ${{ matrix.DOCKER_REPO }} -o ${{ matrix.UNAME_ARCH }}
+      - name: Publish
+        if: github.ref == 'refs/heads/master'
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+          docker push -a ${{ matrix.DOCKER_REPO }}
