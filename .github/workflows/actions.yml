@@ -8,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        QEMU_VER: [v6.1.0-1]
+        QEMU_VER: [v7.2.0-1]
         DOCKER_REPO: [docker.io/multiarch/debian-debootstrap]
-        VERSION: [sid, stretch, buster, bullseye]
+        VERSION: [sid, stretch, buster, bullseye, bookworm]
         UNAME_ARCH: [x86_64, arm64, armel, armv7l, i386, mipsel, mips64el, ppc64el, s390x]
         include:
           - {ARCH: amd64,     QEMU_ARCH: x86_64,  UNAME_ARCH: x86_64}
@@ -22,14 +22,11 @@ jobs:
           - {ARCH: mips64el,  QEMU_ARCH: mipsel,  UNAME_ARCH: mips64el}
           - {ARCH: ppc64el,   QEMU_ARCH: ppc64,   UNAME_ARCH: ppc64el}
           - {ARCH: s390x,     QEMU_ARCH: s390x,   UNAME_ARCH: s390x}
-        exclude:
-          - {VERSION: sid,      UNAME_ARCH: arm64}
-          - {VERSION: bullseye, UNAME_ARCH: arm64}
     steps:
       - uses: actions/checkout@v2
       - name: Build
         run: |
-          sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu focal main universe'
+          sudo add-apt-repository 'deb http://archive.ubuntu.com/ubuntu jammy main universe'
           sudo apt-get update && sudo apt-get install -y qemu-user-static debootstrap
           ./update.sh -a ${{ matrix.ARCH }} -v ${{ matrix.VERSION }} -q ${{ matrix.QEMU_ARCH }} -u ${{ matrix.QEMU_VER }} -d ${{ matrix.DOCKER_REPO }} -o ${{ matrix.UNAME_ARCH }}
       - name: Publish

@@ -28,7 +28,12 @@ shift $((OPTIND-1))
 dir="$VERSION"
 COMPONENTS="main"
 VARIANT="minbase"
-args=( -d "$dir" debootstrap --no-check-gpg --variant="$VARIANT" --components="$COMPONENTS" --include="wget" --arch="$ARCH" "$VERSION" )
+if [[ "$VERSION" == "stretch" ]]; then
+    REPO=http://archive.debian.org/debian/
+else
+    REPO=http://deb.debian.org/debian/
+fi
+args=( -d "$dir" debootstrap --no-check-gpg --variant="$VARIANT" --components="$COMPONENTS" --include="wget" --arch="$ARCH" "$VERSION" "$REPO" )
 
 mkdir -p mkimage $dir
 curl https://raw.githubusercontent.com/moby/moby/6f78b438b88511732ba4ac7c7c9097d148ae3568/contrib/mkimage.sh > mkimage.sh
@@ -42,7 +47,7 @@ mkimage="$(readlink -f "${MKIMAGE:-"mkimage.sh"}")"
     echo 'https://github.com/moby/moby/blob/6f78b438b88511732ba4ac7c7c9097d148ae3568/contrib/mkimage.sh'
 } > "$dir/build-command.txt"
 
-sudo DEBOOTSTRAP="qemu-debootstrap" nice ionice -c 3 "$mkimage" "${args[@]}" 2>&1 | tee "$dir/build.log"
+sudo DEBOOTSTRAP="debootstrap" nice ionice -c 3 "$mkimage" "${args[@]}" 2>&1 | tee "$dir/build.log"
 cat "$dir/build.log"
 sudo chown -R "$(id -u):$(id -g)" "$dir"
 
